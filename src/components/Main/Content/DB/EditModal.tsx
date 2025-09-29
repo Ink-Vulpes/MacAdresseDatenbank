@@ -20,7 +20,7 @@ export default function (props: { open: boolean, set_open: React.Dispatch<React.
 	const [in_mac_c, set_in_mac_c] = useState<FixedLengthArray<string, 6>>([...NULL_MAC_ADDRESS_C])
 	const [confirm_loading, set_confirm_loading] = useState(false)
 
-	const get_col_db = useAppStore((s) => s.get_col_db)
+	const get_col_db = useAppStore((s) => s.get_col_db_entry)
 	const edit_db_entry = useAppStore((s) => s.edit_db_entry)
 
 	const network_cards = get_col_db("network_card") as Array<string>

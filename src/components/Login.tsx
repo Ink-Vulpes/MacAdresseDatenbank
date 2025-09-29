@@ -1,9 +1,10 @@
 import useAppStore from "@/store";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import type { FormProps } from "antd"
 import { Button, Checkbox, Form, Input, Layout, theme, Typography } from "antd"
 import { Content } from "antd/es/layout/layout";
 
-type FieldType = {
+export type FieldType = {
 	username?: string,
 	password?: string,
 	remember?: boolean
@@ -28,17 +29,16 @@ export default function () {
 function PageContent() {
 	const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken()
 
-	// temporary function
-	const set_dummy = useAppStore((state) => state.set_user_dummy)
+	const login = useAppStore((state) => state.login_user)
 
 	const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-		// TODO set temporary user state to a dummy user
-		set_dummy()
+		// TODO : add loading state
+		login(values)
 	};
 
+	// TODO : set temporary user state to a dummy user
 	const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-		// TODO set temporary user state to a dummy user
-		set_dummy()
+		login({})
 	};
 
 	return <>
@@ -54,8 +54,7 @@ function PageContent() {
 		>
 			<Form
 				name="login"
-				labelCol={{ span: 8 }}
-				wrapperCol={{ span: 16 }}
+				layout="horizontal"
 				style={{ maxWidth: 600, margin: "16px 0" }}
 				initialValues={{ remember: false }}
 				onFinish={onFinish}
@@ -63,18 +62,26 @@ function PageContent() {
 				autoComplete="off"
 			>
 				<Form.Item<FieldType>
-					label="Nutzername"
 					name="username"
 					rules={[{ required: true, message: "Bitte geben sie ihr Nutzernamen ein!" }]}
 				>
-					<Input />
+					<Input
+						style={{
+							width: "20vw"
+						}}
+						prefix={<UserOutlined />}
+					/>
 				</Form.Item>
 				<Form.Item<FieldType>
-					label="Passwort"
 					name="password"
 					rules={[{ required: true, message: "Bitte geben sie ihr Nutzernamen ein!" }]}
 				>
-					<Input.Password />
+					<Input.Password
+						style={{
+							width: "20vw"
+						}}
+						prefix={<LockOutlined />}
+					/>
 				</Form.Item>
 				<Form.Item<FieldType>
 					name="remember"

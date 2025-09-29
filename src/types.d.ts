@@ -16,4 +16,14 @@ type UnionToIntersection<U> = (U extends any ? (x: U) => void : never) extends (
 	? I
 	: never;
 
-type Flattened<T> = UnionToIntersection<Flatten<T>>;
+export type Flattened<T> = UnionToIntersection<Flatten<T>>;
+
+export type FlattenObj<T, Prefix extends string = ""> = {
+	[K in keyof T & string as T[K] extends object
+		? never
+		: `${Prefix}${K}`]: T[K];
+} & {
+	[K in keyof T & string as T[K] extends object
+		? `${Prefix}${K}_`
+		: never]: T[K] extends object ? Flatten<T[K], `${Prefix}${K}_`> : never;
+}[keyof T & string];

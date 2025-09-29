@@ -4,8 +4,14 @@ import type {
 	Entry as DBEntry,
 	EntryTyps as DBEntryTyps,
 } from "./components/Main/Content/DB/Table";
-import { db_cash_dummy, user_dummy } from "./store_dummy_data";
+import {
+	db_cash_entry_list_dummy,
+	user_dummy,
+	db_cash_user_list_dummy,
+} from "./store_dummy_data";
 import wait from "./utils/wait";
+import type { User as DBUser } from "./components/Main/Content/ManageUsers";
+import type { FieldType as LoginFieldType } from "./components/Login";
 
 export type UserPermissions = {
 	show_menu: { [k in Menu_Type]: boolean };
@@ -27,12 +33,11 @@ export enum Error {}
 export type StoreState = {
 	user: User | null;
 	main_active_menu: Menu_Type;
-	db_cash: Array<DBEntry>;
+	db_entry_cash: Array<DBEntry>;
+	db_user_cash: Array<DBUser>;
 
-	// TODO: Only a temporary Funktion
-	set_user_dummy: () => void;
-
-	logout_user: () => void;
+	login_user: (user_in: LoginFieldType) => Promise<null | Error>;
+	logout_user: () => Promise<null | Error>;
 
 	set_main_active_menu: (m: Menu_Type) => void;
 
@@ -43,23 +48,43 @@ export type StoreState = {
 		new_entry: Omit<DBEntry, "id">
 	) => Promise<null | Error>;
 	remove_db_entry: (id: string) => Promise<null | Error>;
-	get_col_db: (name: keyof DBEntry) => Array<DBEntryTyps>;
+	get_col_db_entry: (name: keyof DBEntry) => Array<DBEntryTyps>;
+
+	load_db_users: () => Promise<null | Error>;
+	add_db_user: (user: Omit<DBUser, "id">) => Promise<null | Error>;
+	remove_db_user: (id: string) => Promise<null | Error>;
+	edit_db_user: (
+		old_id: string,
+		new_user: Omit<DBUser, "id">
+	) => Promise<null | Error>;
 };
 
 const useAppStore = create<StoreState>((set, get_store) => ({
 	user: null,
 	main_active_menu: DEFAULT_MENU,
-	db_cash: [],
+	db_entry_cash: [],
+	db_user_cash: [],
 
-	set_user_dummy: () => set({ user: { ...user_dummy } }),
+	login_user: async (user_in) => {
+		// TODO : login user
 
-	logout_user: () => set({ user: null }),
+		// Simulate database delay
+		await wait(2000);
+
+		set({ user: { ...user_dummy } });
+		return null;
+	},
+	logout_user: async () => {
+		// TODO: Add logout db req
+		set({ user: null });
+		return null;
+	},
 
 	set_main_active_menu: (m) => set({ main_active_menu: m }),
 
 	load_db_entries: async () => {
 		// TODO: load data from db
-		set({ db_cash: [...db_cash_dummy] });
+		set({ db_entry_cash: [...db_cash_entry_list_dummy] });
 
 		// Simulate database delay
 		await wait(2000);
@@ -80,7 +105,7 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 	edit_db_entry: async (old_id, new_entry) => {
 		const store = get_store();
 
-		// TODO: edit entry to in
+		// TODO: edit entry in DB
 
 		// Simulate database delay
 		await wait(2000);
@@ -99,15 +124,50 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 		store.load_db_entries();
 		return null;
 	},
-
-	get_col_db: (name) => {
-		const dbCash = get_store().db_cash ?? [];
+	get_col_db_entry: (name) => {
+		const dbCash = get_store().db_entry_cash ?? [];
 		const uniqueValues: Array<DBEntryTyps> = [];
 		for (const entry of dbCash) {
 			if (!uniqueValues.includes(entry[name]))
 				uniqueValues.push(entry[name]);
 		}
 		return uniqueValues;
+	},
+
+	load_db_users: async () => {
+		// TODO: Load Data from DB
+
+		// Simulate database delay
+		await wait(2000);
+		set({ db_user_cash: [...db_cash_user_list_dummy] });
+
+		return null;
+	},
+	add_db_user: async (user) => {
+		// TODO : add user to DB
+
+		// Simulate database delay
+		await wait(2000);
+
+		return null;
+	},
+
+	remove_db_user: async (id) => {
+		// TODO : remove user from DB
+
+		// Simulate database delay
+		await wait(2000);
+
+		return null;
+	},
+
+	edit_db_user: async (old_id, new_user) => {
+		// TODO : edit user in DB
+
+		// Simulate database delay
+		await wait(2000);
+
+		return null;
 	},
 }));
 

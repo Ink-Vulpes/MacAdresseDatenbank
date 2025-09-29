@@ -3,7 +3,7 @@ import Slider, { Menu_Type } from "./Slider";
 import useAppStore from "@/store";
 import DB from "./Content/DB";
 import CSV from "./Content/CSV";
-import Manage_Users from "./Content/Manage_Users";
+import Manage_Users from "./Content/ManageUsers";
 
 export default function () {
 

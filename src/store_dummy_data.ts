@@ -1,4 +1,6 @@
 import type { Entry as DBEntry } from "./components/Main/Content/DB/Table";
+import type { User as DBUser } from "./components/Main/Content/ManageUsers";
+
 import type { User } from "./store";
 
 export const user_dummy: User = {
@@ -18,7 +20,7 @@ export const user_dummy: User = {
 	},
 };
 
-export const db_cash_dummy: Array<DBEntry> = [
+export const db_cash_entry_list_dummy: Array<DBEntry> = [
 	{
 		id: "0",
 		name: "Laptop A",
@@ -60,5 +62,83 @@ export const db_cash_dummy: Array<DBEntry> = [
 		network_card: "Cisco NIC",
 		mac: [254, 220, 186, 152, 118, 84],
 		user: "Charlie",
+	},
+];
+
+export const db_cash_user_list_dummy: Array<DBUser> = [
+	{
+		id: "1",
+		name: "Alice Schmidt",
+		email: "alice.schmidt@example.com",
+		permissions: {
+			add_to_db: true,
+			edit_db: true,
+			del_from_db: false,
+			show_menu: {
+				db: true,
+				csv: true,
+				manage_user: false,
+			},
+		},
+	},
+	{
+		id: "2",
+		name: "Bob Mueller",
+		email: "bob.mueller@example.com",
+		permissions: {
+			add_to_db: true,
+			edit_db: false,
+			del_from_db: false,
+			show_menu: {
+				db: true,
+				csv: false,
+				manage_user: false,
+			},
+		},
+	},
+	{
+		id: "3",
+		name: "Charlie Weber",
+		email: "charlie.weber@example.com",
+		permissions: {
+			add_to_db: true,
+			edit_db: true,
+			del_from_db: true,
+			show_menu: {
+				db: true,
+				csv: true,
+				manage_user: true,
+			},
+		},
+	},
+	{
+		id: "4",
+		name: "Diana Fischer",
+		email: "diana.fischer@example.com",
+		permissions: {
+			add_to_db: false,
+			edit_db: false,
+			del_from_db: false,
+			show_menu: {
+				db: true,
+				csv: false,
+				manage_user: false,
+			},
+		},
+	},
+	{
+		id: "5",
+		name: "Erik Schneider",
+		email: "erik.schneider@example.com",
+		permissions: {
+			add_to_db: true,
+			edit_db: true,
+			del_from_db: false,
+			show_menu: {
+				db: true,
+				csv: true,
+				manage_user: false,
+			},
+		},
 	},
 ];

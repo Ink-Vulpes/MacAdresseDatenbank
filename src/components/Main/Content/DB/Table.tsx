@@ -83,7 +83,6 @@ function check_filter_in_val(val: EntryTyps, filter: string): boolean {
 export default function (props: { filter: string, style?: React.CSSProperties }) {
 	const style = props.style ?? {};
 	const filter = process_filter(props.filter)
-	const load_entries = useAppStore((s) => s.load_db_entries)
 	const remove_db_entry = useAppStore((s) => s.remove_db_entry)
 	const user = useAppStore((s) => s.user)
 
@@ -92,7 +91,7 @@ export default function (props: { filter: string, style?: React.CSSProperties })
 	const [del_modal_load, set_del_modal_load] = useState(false)
 	const [edit_modal_open, set_edit_modal_open] = useState(false)
 
-	const source = useAppStore((s) => s.db_cash).filter((v) => {
+	const source = useAppStore((s) => s.db_entry_cash).filter((v) => {
 		if (typeof filter === "string") {
 			for (const [_, val] of Object.entries(v)) {
 				if (check_filter_in_val(val, filter)) return true
@@ -112,7 +111,6 @@ export default function (props: { filter: string, style?: React.CSSProperties })
 			}
 		}
 	})
-
 
 	function get_col(user: User | null): ColumnsType<Entry> {
 		if (!user?.permissions.del_from_db && !user?.permissions.edit_db) return [...temp_columns]
@@ -154,12 +152,6 @@ export default function (props: { filter: string, style?: React.CSSProperties })
 			}
 		]
 	}
-
-
-
-	useEffect(() => {
-		load_entries()
-	}, [])
 
 	return <>
 		<Modal

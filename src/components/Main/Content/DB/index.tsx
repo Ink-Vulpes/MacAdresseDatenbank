@@ -1,6 +1,6 @@
 import { Button, Flex, Layout, theme } from "antd";
 import Table from "./Table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Mentions from "./Mentions";
 import { PlusOutlined } from "@ant-design/icons";
 import useAppStore from "@/store";
@@ -10,9 +10,14 @@ import NewModal from "./NewModal";
 
 export default function () {
 	const [filter, set_filter] = useState(() => "")
+	const load_entries = useAppStore((s) => s.load_db_entries)
 	const [add_modal, set_add_modal] = useState(() => false)
 	const { token: { borderRadiusLG } } = theme.useToken()
 	const user = useAppStore((s) => s.user)
+
+	useEffect(() => {
+		load_entries()
+	}, [])
 
 	return <Layout
 		style={{
