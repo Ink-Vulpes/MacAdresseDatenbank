@@ -1,21 +1,3 @@
-# bun-react-template
-
-To install dependencies:
-
-```bash
-bun install
-```
-
-To start a development server:
-
-```bash
-bun dev
-```
-
-To run for production:
-
-```bash
-bun start
-```
-
-This project was created using `bun init` in bun v1.2.21. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+# Mac-Datenbank
+Das ist eine Webseite zu Verwaltung von Mac-Adressen, die ich für den Informatikunterricht geschrieben habe.
+Sie benutzt im Frontend React, was mithilfe von Bun, zu einer statischen Webseite kompiliert wird und im Backend wird einfaches PHP genutzt.
