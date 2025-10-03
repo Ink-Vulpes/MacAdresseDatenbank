@@ -6,12 +6,16 @@
 	"postCreateCommand": "bun install",
 	"customizations": {
 		"vscode": {
+			"settings": {
+				"php.validate.executablePath": "/bin"
+			},
 			"extensions": [
 				"streetsidesoftware.code-spell-checker-british-english",
 				"oven.bun-vscode",
 				"streetsidesoftware.code-spell-checker",
 				"ms-azuretools.vscode-docker",
-				"streetsidesoftware.code-spell-checker-german"
+				"streetsidesoftware.code-spell-checker-german",
+				"bmewburn.vscode-intelephense-client"
 			]
 		}
 	}

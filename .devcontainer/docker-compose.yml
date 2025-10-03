@@ -2,10 +2,10 @@ services:
    app:
       build:
          context: ..
-         dockerfile: .devcontainer/dockerfile
+         dockerfile: .devcontainer/Dockerfile
       volumes:
          - ..:/workspace:cached
-         - php_htdocs:/php_htdocs
+         - php_htdocs:/www
       command: sleep infinity
       environment:
          - NODE_ENV=development
@@ -13,9 +13,10 @@ services:
    php_server:
       image: php:8.0-apache
       volumes:
-         - php_htdocs:/var/www/html
+         - php_htdocs:/www
+         - ./apache.conf:/etc/apache2/sites-available/000-default.conf
       environment:
-         - APACHE_DOCUMENT_ROOT=/var/www/html
+         - APACHE_DOCUMENT_ROOT=/www
          - DATABASE_URL=mysql://root:root@database:3306/app
       ports:
          - "80:80"
