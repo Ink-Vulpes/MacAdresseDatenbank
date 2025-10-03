@@ -1,0 +1,33 @@
+services:
+   app:
+      build:
+         context: ..
+         dockerfile: .devcontainer/dockerfile
+      volumes:
+         - ..:/workspace:cached
+         - php_htdocs:/php_htdocs
+      command: sleep infinity
+      environment:
+         - NODE_ENV=development
+
+   php_server:
+      image: php:8.0-apache
+      volumes:
+         - php_htdocs:/var/www/html
+      environment:
+         - APACHE_DOCUMENT_ROOT=/var/www/html
+         - DATABASE_URL=mysql://root:root@database:3306/app
+      ports:
+         - "80:80"
+
+   database:
+      image: mysql:8.0
+      restart: unless-stopped
+      environment:
+         MYSQL_ROOT_PASSWORD: root
+         MYSQL_DATABASE: app
+      ports:
+         - "3306:3306"
+
+volumes:
+   php_htdocs:
