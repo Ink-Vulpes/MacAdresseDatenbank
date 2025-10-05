@@ -1,0 +1,6 @@
+{
+    "name": "ink_vulpes/backend",
+    "require": {
+        "webonyx/graphql-php": "^15.24"
+    }
+}
