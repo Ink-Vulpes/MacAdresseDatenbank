@@ -35,6 +35,7 @@ await mkdir("./dist");
 
 console.log("Copying backend files...");
 await cp("./php/html", "./dist/html", { recursive: true });
+await cp("./php/private", "./dist/private", { recursive: true });
 await cp("./php/vendor", "./dist/vendor", { recursive: true });
 await cp("./app_conf.conf", "./dist/app_conf.conf");
 
