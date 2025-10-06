@@ -22,4 +22,17 @@ class Config
 		$this->db_password = $config["DB_PASSWORD"];
 	}
 
+	public function get($key)
+	{
+		return match ($key) {
+			"database" => [
+				"host" => $this->db_host,
+				"port" => $this->db_port,
+				"dbname" => $this->db_name,
+				"user" => $this->db_user,
+				"password" => $this->db_password,
+			],
+			default => throw new \InvalidArgumentException("Unknown configuration key: $key"),
+		};
+	}
 }

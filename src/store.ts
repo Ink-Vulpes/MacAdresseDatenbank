@@ -23,7 +23,6 @@ export type UserPermissions = {
 export type User = {
 	token: string;
 	name: string;
-	created: Date;
 	expire: Date;
 	permissions: UserPermissions;
 };
