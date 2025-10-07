@@ -1,0 +1,60 @@
+DROP DATABASE IF EXISTS app_db;
+
+CREATE DATABASE IF NOT EXISTS app_db;
+
+USE app_db;
+
+CREATE TABLE
+	IF NOT EXISTS users (
+		id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+		name VARCHAR(20) NOT NULL,
+		password_sha512 VARCHAR(255) NOT NULL,
+		email VARCHAR(100) NOT NULL,
+		PRIMARY KEY (id),
+		UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,
+		UNIQUE INDEX name_UNIQUE (name ASC) VISIBLE
+	) ENGINE = InnoDB;
+
+CREATE TABLE
+	IF NOT EXISTS tokens (
+		token VARCHAR(255) NOT NULL,
+		users_id INT UNSIGNED NOT NULL,
+		PRIMARY KEY (token, users_id),
+		UNIQUE INDEX token_UNIQUE (token ASC) VISIBLE,
+		INDEX fk_tokens_users1_idx (users_id ASC) VISIBLE,
+		CONSTRAINT fk_tokens_users1 FOREIGN KEY (users_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
+	) ENGINE = InnoDB;
+
+CREATE TABLE
+	IF NOT EXISTS mac_address (
+		id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+		sect1 VARCHAR(2) NOT NULL,
+		sect2 VARCHAR(2) NOT NULL,
+		sect3 VARCHAR(2) NOT NULL,
+		sect4 VARCHAR(2) NOT NULL,
+		sect5 VARCHAR(2) NOT NULL,
+		sect6 VARCHAR(2) NOT NULL,
+		PRIMARY KEY (id)
+	) ENGINE = InnoDB;
+
+CREATE TABLE
+	IF NOT EXISTS entry (
+		id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+		name VARCHAR(100) NOT NULL,
+		networkcard VARCHAR(200) NOT NULL,
+		mac_address_id INT UNSIGNED NOT NULL,
+		user VARCHAR(100) NULL,
+		PRIMARY KEY (id, mac_address_id),
+		INDEX fk_entry_mac_address1_idx (mac_address_id ASC) VISIBLE,
+		CONSTRAINT fk_entry_mac_address1 FOREIGN KEY (mac_address_id) REFERENCES mac_address (id) ON DELETE NO ACTION ON UPDATE NO ACTION
+	) ENGINE = InnoDB;
+
+CREATE TABLE
+	IF NOT EXISTS permissions (
+		id INT UNSIGNED NOT NULL,
+		permission VARCHAR(100) NOT NULL,
+		users_id INT UNSIGNED NOT NULL,
+		PRIMARY KEY (id, users_id),
+		INDEX fk_permissions_users1_idx (users_id ASC) VISIBLE,
+		CONSTRAINT fk_permissions_users1 FOREIGN KEY (users_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
+	) ENGINE = InnoDB;

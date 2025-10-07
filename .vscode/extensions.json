@@ -1,0 +1,9 @@
+{
+	"recommendations": [
+		"mquandalle.graphql",
+		"mtxr.sqltools",
+		"oven.bun-vscode",
+		"devsense.phptools-vscode",
+		"ms-azuretools.vscode-docker"
+	]
+}

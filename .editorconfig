@@ -1,0 +1,2 @@
+[*.sql]
+max_line_length = 120

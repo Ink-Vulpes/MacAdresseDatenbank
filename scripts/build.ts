@@ -1,15 +1,9 @@
 import { rm, mkdir, cp, access, writeFile } from "fs/promises";
 import { constants } from "fs";
 
-const DEFAULT_CONFIG = `
-# Database configuration
-
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=app_db
-DB_USER=root
-DB_PASSWORD=root
-`;
+export const DEFAULT_CONFIG = await Bun.file(
+	"./scripts/default_app_conf.conf"
+).text();
 
 console.log("Checking dependencies...");
 try {
