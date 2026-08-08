@@ -1,0 +1,7 @@
+{
+   "name": "MacAdressenDatenBank",
+   "dockerComposeFile": "./compose.yml",
+   "service": "dev",
+   "workspaceFolder": "/workspace",
+   "shutdownAction": "stopCompose"
+}

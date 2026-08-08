@@ -24,19 +24,19 @@ try {
 }
 
 console.log("Cleaning up dist...");
-await rm("./dist", { recursive: true, force: true });
-await mkdir("./dist");
+await rm("./dist/www", { recursive: true, force: true });
+await mkdir("./dist/www");
 
 console.log("Copying backend files...");
-await cp("./php/html", "./dist/html", { recursive: true });
-await cp("./php/private", "./dist/private", { recursive: true });
-await cp("./php/vendor", "./dist/vendor", { recursive: true });
-await cp("./app_conf.conf", "./dist/app_conf.conf");
+await cp("./php/html", "./dist/www/html", { recursive: true });
+await cp("./php/private", "./dist/www/private", { recursive: true });
+await cp("./php/vendor", "./dist/www/vendor", { recursive: true });
+await cp("./app_conf.conf", "./dist/www/app_conf.conf");
 
 console.log("Building frontend...");
 await Bun.build({
 	entrypoints: ["./src/index.html"],
-	outdir: "./dist/html",
+	outdir: "./dist/www/html",
 	sourcemap: true,
 	target: "browser",
 	minify: true,
