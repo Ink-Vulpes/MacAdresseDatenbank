@@ -6,8 +6,12 @@ services:
          dockerfile: dev.Dockerfile
       volumes:
          - ../../MacAdresseDatenbank:/workspace
+      ports:
+         - "9003:9003"
       tty: true
       stdin_open: true
+      networks:
+         - app-network
 
    php:
       build:

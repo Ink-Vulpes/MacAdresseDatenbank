@@ -3,5 +3,16 @@
    "dockerComposeFile": "./compose.yml",
    "service": "dev",
    "workspaceFolder": "/workspace",
-   "shutdownAction": "stopCompose"
+   "shutdownAction": "stopCompose",
+   "customizations": {
+      "vscode": {
+         "extensions": [
+            "mquandalle.graphql",
+            "mtxr.sqltools",
+            "oven.bun-vscode",
+            "devsense.phptools-vscode",
+            "ms-azuretools.vscode-docker"
+         ]
+      }
+   }
 }

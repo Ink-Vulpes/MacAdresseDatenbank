@@ -10,6 +10,6 @@ class hello_world implements \ResolverInterface
 
 	public function resolver($rootValue, array $args)
 	{
-		return "Hello, world!";
+		return "Hello World!";
 	}
 }
