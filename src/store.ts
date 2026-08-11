@@ -27,7 +27,7 @@ export type User = {
 	permissions: UserPermissions;
 };
 
-export enum Error {}
+export enum Error { }
 
 export type StoreState = {
 	user: User | null;
@@ -64,13 +64,39 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 	db_entry_cash: [],
 	db_user_cash: [],
 
-	login_user: async (user_in) => {
-		// TODO : login user
+	login_user: async (user_in: LoginFieldType) => {
+		if (user_in.username === undefined) return null;
 
-		// Simulate database delay
-		await wait(2000);
+		const res = await (await fetch(window.location.href + "api.php", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				query: `mutation {
+					login (username: "${user_in.username}", password: "${user_in.password}") {
+						token
+						permissions
+						expiresIn	
+					}
+				}`
+			})
+		})).json()
 
-		set({ user: { ...user_dummy } });
+		if (res.data.login === null) {
+			return null;
+			// TODO: Faild Login handling
+		}
+		const data = res.data.login;
+
+		set({
+			user: {
+				expire: data.expiresIn,
+				name: user_in.username,
+				permissions: user_dummy.permissions, // TODO: Permissions Maping
+				token: data.token
+			}
+		})
 		return null;
 	},
 	logout_user: async () => {

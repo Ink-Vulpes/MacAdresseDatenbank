@@ -1,12 +1,9 @@
 USE app_db;
-
 -- Test Users
-INSERT INTO
-	users (name, password_sha512, email)
-VALUES
-	(
+INSERT INTO users (name, password_sha512, email)
+VALUES (
 		'admin',
-		'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec',
+		'88d2bb21bcd04f46447a1a01764c0b60982dbade025df37dcf6d8d3eb4a21caa4330505d0d46d3e9e1c427f028c677b227276c409e435b8933c518add5fb5279',
 		'admin@example.com'
 	),
 	(
@@ -19,21 +16,15 @@ VALUES
 		'b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86',
 		'john.doe@example.com'
 	);
-
--- Test MAC Addresses (Hex values as strings)
-INSERT INTO
-	mac_address (sect1, sect2, sect3, sect4, sect5, sect6)
-VALUES
-	('00', '1A', '2B', '3C', '4D', '5E'),
-	('AA', 'BB', 'CC', 'DD', 'EE', 'FF'),
-	('12', '34', '56', '78', '9A', 'BC'),
-	('F0', 'E1', 'D2', 'C3', 'B4', 'A5');
-
+-- Test MAC Addresses (decimal byte values)
+INSERT INTO mac_address (sect1, sect2, sect3, sect4, sect5, sect6)
+VALUES (0, 26, 43, 60, 77, 94),
+	(170, 187, 204, 221, 238, 255),
+	(18, 52, 86, 120, 154, 188),
+	(240, 225, 210, 195, 180, 165);
 -- Test Entries
-INSERT INTO
-	entry (name, networkcard, mac_address_id, user)
-VALUES
-	(
+INSERT INTO entry (name, networkcard, mac_address_id, user)
+VALUES (
 		'Server-01',
 		'Intel Ethernet Controller',
 		1,
@@ -57,12 +48,9 @@ VALUES
 		4,
 		NULL
 	);
-
 -- Test Tokens
-INSERT INTO
-	tokens (token, users_id)
-VALUES
-	(
+INSERT INTO tokens (token, user_id)
+VALUES (
 		'abc123def456ghi789jkl012mno345pqr678stu901vwx234yz',
 		1
 	),
@@ -78,12 +66,9 @@ VALUES
 		'refresh_token_admin_session_active_until_tomorrow_end',
 		1
 	);
-
 -- Test Permissions
-INSERT INTO
-	permissions (id, permission, users_id)
-VALUES
-	(1, 'read_users', 1),
+INSERT INTO permissions (id, permission, user_id)
+VALUES (1, 'read_users', 1),
 	(2, 'write_users', 1),
 	(3, 'delete_users', 1),
 	(4, 'read_entries', 1),

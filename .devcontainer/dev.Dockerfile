@@ -6,6 +6,6 @@ RUN apt-get update && apt-get install -y \
    composer \
    && rm -rf /var/var/lib/apt/lists/*
 
-RUN mkdir /workspace
+RUN mkdir /workspace && mkdir /dist && mkdir /dist/www
 
 RUN curl -fsSL https://bun.sh/install | bash

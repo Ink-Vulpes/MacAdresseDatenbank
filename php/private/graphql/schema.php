@@ -67,6 +67,9 @@ class Schema
 
 	public function execute($query, $rootValue, $context, $variableValues)
 	{
+		if (is_null($query)) {
+			throw new Error("empty body");
+		}
 		return GraphQL::executeQuery($this->schema, $query, $rootValue, $context, $variableValues);
 	}
 }

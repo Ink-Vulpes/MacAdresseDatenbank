@@ -11,7 +11,9 @@ $variableValues = isset($input['variables']) ? $input['variables'] : null;
 try {
 	$rootValue = ['prefix' => 'You said: '];
 	$result = $schema->execute($query, $rootValue, null, $variableValues);
-	$output = $result->toArray();
+	$output = $result->toArray(
+		\GraphQL\Error\DebugFlag::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\DebugFlag::INCLUDE_TRACE
+	);
 } catch (\Exception $e) {
 	$output = [
 		'errors' => [
