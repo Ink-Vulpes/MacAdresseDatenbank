@@ -4,7 +4,7 @@ namespace MacAdresseDatenbank\Resolvers;
 
 require_once __DIR__ . "/resolver.php";
 
-class hello_world implements \ResolverInterface
+class helloWorld implements \ResolverInterface
 {
 	use \ResolverTrait;
 

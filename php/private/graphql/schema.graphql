@@ -1,14 +1,27 @@
 type Query {
-	hello_world: String
-	addresses(from: Int!, to: Int!): [MacAdress]
+	helloWorld: String
+	addresses(from: Int!, to: Int!): AddressesRes
+	addressesLen: Int
 }
 
 type Mutation {
 	login(username: String!, password: String!): AuthPayload
 }
 
+type AddressesRes {
+	range: Range
+	from: Int	
+	addresses: [MacAdress]
+}
+
+type Range {
+	from: Int
+	to: Int
+}
+
 type MacAdress {
 	device_name: String
+	user_name: String
 	networkcard: String
 	macAdress: [Int]
 }
