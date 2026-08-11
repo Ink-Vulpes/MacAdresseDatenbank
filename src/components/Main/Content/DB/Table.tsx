@@ -2,7 +2,7 @@ import useAppStore, { type User } from "@/store"
 import type { FixedLengthArray } from "@/types"
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons"
 import { Button, Descriptions, Flex, Modal, Space } from "antd"
-import type { ColumnsType } from "antd/es/table"
+import type { ColumnsType, TablePaginationConfig } from "antd/es/table"
 import Table from "antd/es/table"
 import { useEffect, useState } from "react"
 import EditModal from "./EditModal"
@@ -85,8 +85,11 @@ export default function (props: { filter: string, style?: React.CSSProperties })
 	const filter = process_filter(props.filter)
 	const remove_db_entry = useAppStore((s) => s.remove_db_entry)
 	const user = useAppStore((s) => s.user)
+	const loaded_db_enteries = useAppStore((s) => s.loaded_db_entries);
+	const load_db_entries = useAppStore((s) => s.load_db_entries);
 
 	const [active_entry, set_active_entry] = useState<Entry | null>(null)
+	const [current_page, set_current_page] = useState<number>(1)
 	const [del_modal_open, set_del_modal_open] = useState(false)
 	const [del_modal_load, set_del_modal_load] = useState(false)
 	const [edit_modal_open, set_edit_modal_open] = useState(false)
@@ -153,6 +156,12 @@ export default function (props: { filter: string, style?: React.CSSProperties })
 		]
 	}
 
+	function update_page(e: TablePaginationConfig) {
+		if (e.current === undefined) return;
+		if (e.current * 10 > loaded_db_enteries.to) load_db_entries((e.current * 10) - loaded_db_enteries.to);
+		set_current_page(e.current);
+	}
+
 	return <>
 		<Modal
 			open={del_modal_open}
@@ -193,7 +202,12 @@ export default function (props: { filter: string, style?: React.CSSProperties })
 			style={style}
 			columns={get_col(user)}
 			dataSource={source}
-
+			onChange={update_page}
+			pagination={{
+				pageSize: 10,
+				total: loaded_db_enteries.total,
+				current: current_page
+			}}
 		/>
 	</>
 }

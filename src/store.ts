@@ -3,6 +3,7 @@ import { DEFAULT_MENU, Menu_Type } from "./components/Main/Slider";
 import type {
 	Entry as DBEntry,
 	EntryTyps as DBEntryTyps,
+	Entry,
 } from "./components/Main/Content/DB/Table";
 import {
 	db_cash_entry_list_dummy,
@@ -33,6 +34,7 @@ export type StoreState = {
 	user: User | null;
 	main_active_menu: Menu_Type;
 	db_entry_cash: Array<DBEntry>;
+	loaded_db_entries: { from: number, to: number, total: number },
 	db_user_cash: Array<DBUser>;
 
 	login_user: (user_in: LoginFieldType) => Promise<null | Error>;
@@ -40,7 +42,8 @@ export type StoreState = {
 
 	set_main_active_menu: (m: Menu_Type) => void;
 
-	load_db_entries: () => Promise<null | Error>;
+	load_db_entries: (n: number) => Promise<null | Error>;
+	reload_db_entries: () => Promise<null | Error>
 	add_db_entry: (entry: Omit<DBEntry, "id">) => Promise<null | Error>;
 	edit_db_entry: (
 		old_id: string,
@@ -61,6 +64,7 @@ export type StoreState = {
 const useAppStore = create<StoreState>((set, get_store) => ({
 	user: null,
 	main_active_menu: DEFAULT_MENU,
+	loaded_db_entries: { from: 0, to: 0, total: 10 },
 	db_entry_cash: [],
 	db_user_cash: [],
 
@@ -107,14 +111,82 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 
 	set_main_active_menu: (m) => set({ main_active_menu: m }),
 
-	load_db_entries: async () => {
-		// TODO: load data from db
-		set({ db_entry_cash: [...db_cash_entry_list_dummy] });
+	load_db_entries: async (n: number) => {
+		const res = await (await fetch(window.location.href + "api.php", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${get_store().user?.token}`
+			},
+			body: JSON.stringify({
+				query: `{
+					addresses (from: ${get_store().loaded_db_entries.to + 1}, to: ${get_store().loaded_db_entries.to + 1 + n}) {
+						total
+						addresses {
+							id
+							device_name
+							user_name
+							networkcard
+							macAdress	
+						}
+					}
+				}`
+			})
 
-		// Simulate database delay
-		await wait(2000);
+		})).json()
+		set({
+			db_entry_cash: [
+				...get_store().db_entry_cash,
+				...res.data.addresses.addresses.map((v: any): Entry => ({
+					id: v.id,
+					user: v.user_name,
+					network_card: v.networkcard,
+					mac: v.macAdress,
+					name: v.device_name
+				}))
+			],
+			loaded_db_entries: {
+				from: get_store().loaded_db_entries.from,
+				to: get_store().loaded_db_entries.to + n,
+				total: res.data.addresses.total
+			}
+		});
 
 		return null;
+	},
+	reload_db_entries: async () => {
+		const res = await (await fetch(window.location.href + "api.php", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${get_store().user?.token}`
+			},
+			body: JSON.stringify({
+				query: `{
+					addresses (from: ${get_store().loaded_db_entries.from}, to: ${get_store().loaded_db_entries.to}) {
+						total
+						addresses {
+							id
+							device_name
+							user_name
+							networkcard
+							macAdress	
+						}
+					}
+				}`
+			})
+
+		})).json()
+		set({
+			db_entry_cash: res.data.addresses.addresses.map((v: any): Entry => ({
+				id: v.id,
+				user: v.user_name,
+				network_card: v.networkcard,
+				mac: v.macAdress,
+				name: v.device_name
+			}))
+		});
+		return null
 	},
 	add_db_entry: async (entry) => {
 		const store = get_store();
@@ -124,7 +196,7 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 		// Simulate database delay
 		await wait(2000);
 
-		store.load_db_entries();
+		store.reload_db_entries();
 		return null;
 	},
 	edit_db_entry: async (old_id, new_entry) => {
@@ -135,7 +207,7 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 		// Simulate database delay
 		await wait(2000);
 
-		store.load_db_entries();
+		store.reload_db_entries();
 		return null;
 	},
 	remove_db_entry: async (id) => {
@@ -146,7 +218,7 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 		// Simulate database delay
 		await wait(2000);
 
-		store.load_db_entries();
+		store.reload_db_entries();
 		return null;
 	},
 	get_col_db_entry: (name) => {

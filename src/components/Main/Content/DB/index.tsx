@@ -16,7 +16,7 @@ export default function () {
 	const user = useAppStore((s) => s.user)
 
 	useEffect(() => {
-		load_entries()
+		load_entries(10)
 	}, [])
 
 	return <Layout

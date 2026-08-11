@@ -10,7 +10,7 @@ type Mutation {
 
 type AddressesRes {
 	range: Range
-	from: Int	
+	total: Int	
 	addresses: [MacAdress]
 }
 
@@ -20,6 +20,7 @@ type Range {
 }
 
 type MacAdress {
+	id: Int
 	device_name: String
 	user_name: String
 	networkcard: String
