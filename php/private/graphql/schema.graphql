@@ -7,6 +7,7 @@ type Query {
 type Mutation {
 	login(username: String!, password: String!): AuthPayload
 	logout(token: String!): Boolean
+	createAdresses(addresses: [MacAdressPayload!]!): [MacAdress]
 }
 
 type AddressesRes {
@@ -25,14 +26,32 @@ type MacAdress {
 	device_name: String
 	user_name: String
 	networkcard: String
-	macAdress: [Int]
+	macAdress: MacAdressData
 }
 
-type MacAdressPayload {
-	device_name: String
+input MacAdressPayload {
+	device_name: String!
 	user_name: String
-	networkcard: String
-	macAdress: [Int]
+	networkcard: String!
+	macAdress: MacAdressDataPayload!
+}
+
+input MacAdressDataPayload {
+	sect1: Int!,
+	sect2: Int!,
+	sect3: Int!,
+	sect4: Int!,
+	sect5: Int!,
+	sect6: Int!,
+}
+
+type MacAdressData {
+	sect1: Int,
+	sect2: Int,
+	sect3: Int,
+	sect4: Int,
+	sect5: Int,
+	sect6: Int,
 }
 
 type AuthPayload {

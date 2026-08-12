@@ -138,7 +138,14 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 							device_name
 							user_name
 							networkcard
-							macAdress	
+							macAdress {
+								sect1
+								sect2
+								sect3
+								sect4
+								sect5
+								sect6
+							}	
 						}
 					}
 				}`
@@ -152,7 +159,14 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 					id: v.id,
 					user: v.user_name,
 					network_card: v.networkcard,
-					mac: v.macAdress,
+					mac: [
+						v.macAdress.sect1,
+						v.macAdress.sect2,
+						v.macAdress.sect3,
+						v.macAdress.sect4,
+						v.macAdress.sect5,
+						v.macAdress.sect6,
+					],
 					name: v.device_name
 				}))
 			],
@@ -181,7 +195,14 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 							device_name
 							user_name
 							networkcard
-							macAdress	
+							macAdress {
+								sect1
+								sect2
+								sect3
+								sect4
+								sect5
+								sect6
+							}	
 						}
 					}
 				}`
@@ -193,7 +214,14 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 				id: v.id,
 				user: v.user_name,
 				network_card: v.networkcard,
-				mac: v.macAdress,
+				mac: [
+					v.macAdress.sect1,
+					v.macAdress.sect2,
+					v.macAdress.sect3,
+					v.macAdress.sect4,
+					v.macAdress.sect5,
+					v.macAdress.sect6,
+				],
 				name: v.device_name
 			}))
 		});

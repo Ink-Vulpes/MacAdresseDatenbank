@@ -30,12 +30,12 @@ class addresses implements \ResolverInterface
             'networkcard' => $v['networkcard'],
             'user_name' => $v['user'],
             'macAdress' => [
-               $v['sect1'],
-               $v['sect2'],
-               $v['sect3'],
-               $v['sect4'],
-               $v['sect5'],
-               $v['sect6'],
+               'sect1' => $v['sect1'],
+               'sect2' => $v['sect2'],
+               'sect3' => $v['sect3'],
+               'sect4' => $v['sect4'],
+               'sect5' => $v['sect5'],
+               'sect6' => $v['sect6'],
             ]
          ], $result),
       ];

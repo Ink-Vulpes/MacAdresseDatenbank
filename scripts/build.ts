@@ -55,7 +55,7 @@ await Bun.build({
 		"process.env.NODE_ENV": "'production'",
 	},
 });
-console.log("Building graphql client...")
+console.log("Building graphql UI...")
 await Bun.build({
 	entrypoints: ["./graphql_ui/index.html"],
 	outdir: "/dist/www/html/graphql_ui",
