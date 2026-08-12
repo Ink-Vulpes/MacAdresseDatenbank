@@ -66,7 +66,7 @@ export default function (props: { open: boolean, set_open: React.Dispatch<React.
 		set_confirm_loading(true)
 		try {
 			const data = await form.validateFields()
-			await add_db_entry(data)
+			await add_db_entry([data])
 			onCancel()
 			set_confirm_loading(false)
 		} catch (error) {

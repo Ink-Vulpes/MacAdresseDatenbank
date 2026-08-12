@@ -6,14 +6,14 @@ import type {
 	Entry,
 } from "./components/Main/Content/DB/Table";
 import {
-	db_cash_entry_list_dummy,
 	user_dummy,
 	db_cash_user_list_dummy,
 } from "./store_dummy_data";
 import wait from "./utils/wait";
 import type { User as DBUser } from "./components/Main/Content/ManageUsers";
 import type { FieldType as LoginFieldType } from "./components/Login";
-import { ApiFilled } from "@ant-design/icons";
+
+const api_url = window.location.origin + "/api.php"
 
 export type UserPermissions = {
 	show_menu: { [k in Menu_Type]: boolean };
@@ -45,7 +45,7 @@ export type StoreState = {
 
 	load_db_entries: (n: number) => Promise<null | Error>;
 	reload_db_entries: () => Promise<null | Error>
-	add_db_entry: (entry: Omit<DBEntry, "id">) => Promise<null | Error>;
+	add_db_entry: (entry: Array<Omit<DBEntry, "id">>) => Promise<null | Error>;
 	edit_db_entry: (
 		old_id: string,
 		new_entry: Omit<DBEntry, "id">
@@ -72,7 +72,7 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 	login_user: async (user_in: LoginFieldType) => {
 		if (user_in.username === undefined) return null;
 
-		const res = await (await fetch(window.location.href + "api.php", {
+		const res = await (await fetch(api_url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -80,11 +80,11 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 			body: JSON.stringify({
 				query: `mutation {
 					login (username: "${user_in.username}", password: "${user_in.password}") {
-						token
-						permissions
-						expiresIn	
+						token,
+						permissions,
+						expiresIn,
 					}
-				}`
+				}`.replace(/[\n\r\t]/gm, "")
 			})
 		})).json()
 
@@ -105,7 +105,7 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 		return null;
 	},
 	logout_user: async () => {
-		await fetch(window.location.href + "api.php", {
+		await fetch(api_url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -113,7 +113,7 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 			body: JSON.stringify({
 				query: `mutation {
 					logout (token: "${get_store().user?.token}")
-				}`
+				}`.replace(/[\n\r\t]/gm, "")
 			})
 		})
 		set({ user: null });
@@ -123,7 +123,7 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 	set_main_active_menu: (m) => set({ main_active_menu: m }),
 
 	load_db_entries: async (n: number) => {
-		const res = await (await fetch(window.location.href + "api.php", {
+		const res = await (await fetch(api_url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -132,23 +132,23 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 			body: JSON.stringify({
 				query: `{
 					addresses (from: ${get_store().loaded_db_entries.to + 1}, to: ${get_store().loaded_db_entries.to + 1 + n}) {
-						total
+						total,
 						addresses {
-							id
-							device_name
-							user_name
-							networkcard
+							id,
+							device_name,
+							user_name,
+							networkcard,
 							macAdress {
-								sect1
-								sect2
-								sect3
-								sect4
-								sect5
-								sect6
+								sect1,
+								sect2,
+								sect3,
+								sect4,
+								sect5,
+								sect6,
 							}	
 						}
 					}
-				}`
+				}`.replace(/[\n\r\t]/gm, "")
 			})
 
 		})).json()
@@ -180,7 +180,7 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 		return null;
 	},
 	reload_db_entries: async () => {
-		const res = await (await fetch(window.location.href + "api.php", {
+		const res = await (await fetch(api_url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -189,23 +189,23 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 			body: JSON.stringify({
 				query: `{
 					addresses (from: ${get_store().loaded_db_entries.from}, to: ${get_store().loaded_db_entries.to}) {
-						total
+						total,
 						addresses {
-							id
-							device_name
-							user_name
-							networkcard
+							id,
+							device_name,
+							user_name,
+							networkcard,
 							macAdress {
-								sect1
-								sect2
-								sect3
-								sect4
-								sect5
+								sect1,
+								sect2,
+								sect3,
+								sect4,
+								sect5,
 								sect6
 							}	
 						}
 					}
-				}`
+				}`.replace(/[\n\r\t]/gm, "")
 			})
 
 		})).json()
@@ -227,14 +227,37 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 		});
 		return null
 	},
-	add_db_entry: async (entry) => {
+	add_db_entry: async (entry: Array<Omit<DBEntry, "id">>) => {
 		const store = get_store();
-
-		// TODO: add entry to db
-
-		// Simulate database delay
-		await wait(2000);
-
+		let str_entry = ""
+		entry.forEach((e) => (str_entry += `{
+				device_name: "${e.name}",
+				${e.user !== undefined ? `user_name: "${e.user}",` : ""}
+				networkcard: "${e.network_card}",
+				macAdress: {
+					sect1: ${e.mac[0]},
+					sect2: ${e.mac[1]},	
+					sect3: ${e.mac[2]},	
+					sect4: ${e.mac[3]},	
+					sect5: ${e.mac[4]},	
+					sect6: ${e.mac[5]}	
+				}
+			},`.replace(/[\n\r\t]/gm, "")
+		))
+		await fetch(api_url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${get_store().user?.token}`
+			},
+			body: JSON.stringify({
+				query: `mutation {
+					createAdresses(addresses:[
+						${str_entry}	
+					])	{id}
+				}`.replace(/[\n\r\t]/gm, "")
+			})
+		})
 		store.reload_db_entries();
 		return null;
 	},
