@@ -204,6 +204,8 @@ export default function (props: { filter: string, style?: React.CSSProperties })
 			dataSource={source}
 			onChange={update_page}
 			pagination={{
+				showSizeChanger: false,
+				simple: true,
 				pageSize: 10,
 				total: loaded_db_enteries.total,
 				current: current_page

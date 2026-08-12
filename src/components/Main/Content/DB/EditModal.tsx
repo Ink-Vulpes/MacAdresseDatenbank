@@ -4,7 +4,7 @@ import type { FixedLengthArray } from "@/types";
 import { useEffect, useState } from "react";
 import useAppStore from "@/store";
 import { AutoComplete, Form, Input, Modal, Space, type AutoCompleteProps } from "antd";
-import { validate_mac_address_c } from "./NewModal";
+import { validate_mac_adress_str } from "./NewModal";
 import arrayInArray from "@/utils/arrayInArray";
 import Title from "antd/es/typography/Title";
 import type { DefaultOptionType } from "antd/es/select";
@@ -45,7 +45,7 @@ export default function (props: { open: boolean, set_open: React.Dispatch<React.
 
 	if (props.entry === null) return <></>;
 
-	if (validate_mac_address_c(in_mac_c)) form.setFields([{
+	if (validate_mac_adress_str(in_mac_c)) form.setFields([{
 		name: "mac",
 		errors: ["Bitte geben sie die Mac-Adresse an."],
 		validated: false
