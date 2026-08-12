@@ -34,9 +34,7 @@ try {
 }
 
 console.log("Cleaning up dist...");
-// if (dirExistsSync("/dist/www")) await rm("/dist/www", { recursive: true, force: true });
-// await mkdir("/dist/www");
-$`rm -rf /dist/www/*`
+await $`rm -rf /dist/www/*`
 
 console.log("Copying backend files...");
 await cp("./php/html", "/dist/www/html", { recursive: true });
@@ -55,14 +53,16 @@ await Bun.build({
 		"process.env.NODE_ENV": "'production'",
 	},
 });
-console.log("Building graphql UI...")
-await Bun.build({
-	entrypoints: ["./graphql_ui/index.html"],
-	outdir: "/dist/www/html/graphql_ui",
-	sourcemap: true,
-	target: "browser",
-	minify: true,
-	define: {
-		"process.env.NODE_ENV": "'production'",
-	},
-})
+if (Bun.env.GQL_UI == "true") {
+	console.log("Building graphql UI...")
+	await Bun.build({
+		entrypoints: ["./graphql_ui/index.html"],
+		outdir: "/dist/www/html/graphql_ui",
+		sourcemap: true,
+		target: "browser",
+		minify: true,
+		define: {
+			"process.env.NODE_ENV": "'production'",
+		},
+	})
+}

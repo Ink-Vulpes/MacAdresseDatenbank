@@ -1,2 +1,4 @@
 <?php
-echo xdebug_info();
+if (getenv("APP_ENV") == "development") {
+   echo xdebug_info();
+}
