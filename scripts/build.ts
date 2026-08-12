@@ -1,4 +1,4 @@
-import { rm, mkdir, cp, access, writeFile } from "fs/promises";
+import { cp, access, writeFile } from "fs/promises";
 import { existsSync, statSync } from "node:fs";
 import { constants } from "fs";
 import { $ } from "bun"
@@ -55,3 +55,14 @@ await Bun.build({
 		"process.env.NODE_ENV": "'production'",
 	},
 });
+console.log("Building graphql client...")
+await Bun.build({
+	entrypoints: ["./graphql_ui/index.html"],
+	outdir: "/dist/www/html/graphql_ui",
+	sourcemap: true,
+	target: "browser",
+	minify: true,
+	define: {
+		"process.env.NODE_ENV": "'production'",
+	},
+})

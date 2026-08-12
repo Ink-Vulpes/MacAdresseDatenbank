@@ -13,6 +13,7 @@ import {
 import wait from "./utils/wait";
 import type { User as DBUser } from "./components/Main/Content/ManageUsers";
 import type { FieldType as LoginFieldType } from "./components/Login";
+import { ApiFilled } from "@ant-design/icons";
 
 export type UserPermissions = {
 	show_menu: { [k in Menu_Type]: boolean };
@@ -104,7 +105,17 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 		return null;
 	},
 	logout_user: async () => {
-		// TODO: Add logout db req
+		await fetch(window.location.href + "api.php", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				query: `mutation {
+					logout (token: "${get_store().user?.token}")
+				}`
+			})
+		})
 		set({ user: null });
 		return null;
 	},
