@@ -264,10 +264,30 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 	edit_db_entry: async (old_id, new_entry) => {
 		const store = get_store();
 
-		// TODO: edit entry in DB
-
-		// Simulate database delay
-		await wait(2000);
+		await fetch(api_url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${get_store().user?.token}`
+			},
+			body: JSON.stringify({
+				query: `mutation {
+					editAdresse(id: ${old_id}, edit:{
+						device_name: "${new_entry.name}",
+						networkcard: "${new_entry.network_card}",
+						${new_entry.user !== undefined ? `user_name:"${new_entry.user}",` : ''}
+						macAdress: {
+							sect1:${new_entry.mac[0]},	
+							sect2:${new_entry.mac[1]},	
+							sect3:${new_entry.mac[2]},	
+							sect4:${new_entry.mac[3]},	
+							sect5:${new_entry.mac[4]},	
+							sect6:${new_entry.mac[5]},	
+						}
+					}) {id}
+				}`.replace(/[\n\r\t]/gm, "")
+			})
+		})
 
 		store.reload_db_entries();
 		return null;

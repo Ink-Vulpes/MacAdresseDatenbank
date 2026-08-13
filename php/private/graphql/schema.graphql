@@ -8,6 +8,7 @@ type Mutation {
 	login(username: String!, password: String!): AuthPayload
 	logout(token: String!): Boolean
 	createAdresses(addresses: [MacAdressPayload!]!): [MacAdress]
+	editAdresse(id: Int!, edit: MacAdressPayloadEdit!): MacAdress
 }
 
 type AddressesRes {
@@ -27,6 +28,13 @@ type MacAdress {
 	user_name: String
 	networkcard: String
 	macAdress: MacAdressData
+}
+
+input MacAdressPayloadEdit {
+	device_name: String
+	user_name: String
+	networkcard: String
+	macAdress: MacAdressDataPayload
 }
 
 input MacAdressPayload {

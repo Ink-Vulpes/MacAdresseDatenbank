@@ -3,6 +3,7 @@ RUN apt-get update && apt-get install -y \
    php-cli \
    curl \
    unzip \
+   ripgrep \
    composer \
    && rm -rf /var/var/lib/apt/lists/*
 
