@@ -8,7 +8,8 @@ type Mutation {
 	login(username: String!, password: String!): AuthPayload
 	logout(token: String!): Boolean
 	createAdresses(addresses: [MacAdressPayload!]!): [MacAdress]
-	editAdresse(id: Int!, edit: MacAdressPayloadEdit!): MacAdress
+	editAdress(id: Int!, edit: MacAdressPayloadEdit!): MacAdress
+	deleteAdress(id: Int!): Boolean
 }
 
 type AddressesRes {

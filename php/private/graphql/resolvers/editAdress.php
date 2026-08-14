@@ -3,7 +3,7 @@ namespace MacAdresseDatenbank\Resolvers;
 
 require_once __DIR__ . "/resolver.php";
 
-class editAdresse implements \ResolverInterface
+class editAdress implements \ResolverInterface
 {
 
    use \ResolverTrait;

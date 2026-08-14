@@ -295,10 +295,18 @@ const useAppStore = create<StoreState>((set, get_store) => ({
 	remove_db_entry: async (id) => {
 		const store = get_store();
 
-		// TODO: remove entry from db
-
-		// Simulate database delay
-		await wait(2000);
+		await fetch(api_url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${get_store().user?.token}`
+			},
+			body: JSON.stringify({
+				query: `mutation {
+					deleteAdress(id: ${id})
+				}`.replace(/[\n\r\t]/gm, "")
+			})
+		})
 
 		store.reload_db_entries();
 		return null;

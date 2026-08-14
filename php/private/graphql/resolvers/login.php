@@ -23,13 +23,13 @@ class login implements \ResolverInterface
 		$username = $args['username'];
 		$password = $args['password'];
 
+		$test = hash('sha256', $password);
 		$stmt = $this->pdo->prepare('SELECT * FROM users WHERE name = ?');
 		$stmt->execute([$username]);
 		if ($stmt->rowCount() === 0) {
 			throw new \GraphQL\Error\UserError('Ivalide Username or Password.');
 		}
 		$u_data = $stmt->fetch(\PDO::FETCH_ASSOC);
-		$test = hash('sha256', $password);
 		if (hash('sha256', $password) !== $u_data['password_sha512']) {
 			throw new \GraphQL\Error\UserError('Invalide Password.');
 		}
